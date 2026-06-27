@@ -22,8 +22,17 @@ import nl.jknaapen.fladder.utility.leanBackEnabled
 class VideoPlayerActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        
+        // TEMPORARY DIAGNOSTIC: Allow video content to extend into the display cutout area in all orientations
+        // to test if Android window configuration is causing the landscape notch inset issue
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes = window.attributes.apply {
+                layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            }
+        }
+        
         VideoPlayerObject.currentActivity = this
 
         window.setFlags(
